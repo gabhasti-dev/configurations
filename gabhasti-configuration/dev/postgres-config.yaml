@@ -1,65 +1,87 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: postgresql
-  labels:
-    app: postgre-db
-spec:
-  type: NodePort
-  ports:
-    - port: 5432
-  selector:
-    app: postgre-db
-    tier: postgreSQL
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres-claim
-  labels:
-    app: postgre-db
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgresql
-  labels:
-    app: postgres-db
+  name: postgres
 spec:
-  selector: 
-    matchLabels: 
-      app: postgres-db
-  strategy:
-    type: Recreate
+  selector:
+   matchLabels:
+    app: postgres
+  replicas: 1
   template:
     metadata:
       labels:
-        app: postgres-db
-        tier: postgreSQL
+        app: postgres
     spec:
       containers:
-        - image: postgres:12.2
-          name: postgresql
-          env:
-            - name: POSTGRES_USER
-              value: postgres-db-sit
-            - name: POSTGRES_DB
-              value: postgres-gabhasti
-            - name: POSTGRES_PASSWORD
-              value: postgres-db-sit
-          ports:
-            - containerPort: 5432
-              name: postgresql
+        - name: postgres
+          image: postgres:12.2
+          imagePullPolicy: "IfNotPresent"
+          envFrom:
+            - configMapRef:
+                name: postgres-config
           volumeMounts:
-            - name: postgresql
-              mountPath: /var/lib/postgresql/data
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb
       volumes:
-        - name: postgresql
+        - name: postgredb
           persistentVolumeClaim:
-            claimName: postgres-claim
+            claimName: postgres-pv-claim
+      imagePullSecrets:
+      - name: gabhastiharishscf
+---
+    kind: PersistentVolume
+    apiVersion: v1
+    metadata:
+      name: postgres-pv-volume
+      labels:
+        type: local
+        app: postgres
+    spec:
+      storageClassName: manual
+      capacity:
+        storage: 5Gi
+      accessModes:
+        - ReadWriteMany
+      hostPath:
+        path: "/mnt/data"
+---
+    kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: postgres-pv-claim
+      labels:
+        app: postgres
+    spec:
+      storageClassName: manual
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 5Gi
+    
+---
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: postgres-config
+      labels:
+        app: postgres
+    data:
+      POSTGRES_DB: gabhasti
+      POSTGRES_USER: devgabhasti
+      POSTGRES_PASSWORD: devgabhasti
+---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: postgres
+      labels:
+        app: postgres
+    spec:
+       ports:
+        - name: postgres
+          port: 5432
+          nodePort: 30432
+       type: NodePort
+       selector:
+        app: postgres
