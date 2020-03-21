@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+   name: environment-config
+   labels:
+      app: environment
+data:
+  ENV: dev
