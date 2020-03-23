@@ -8,8 +8,8 @@ metadata:
 spec:
    storageClassName: manual
    capacity:
-      storage: 10Gi
+      storage: 1000M
    accessModes:
-   - ReadWriteMany
-   hostPath:
-      path: /mnt/data
+   - ReadWriteOnce
+   hostPath: 
+     path: "/data/nfs/"

@@ -28,6 +28,7 @@ spec:
                claimName: postgres-pv-claim
          imagePullSecrets:
          -  name: gabhastiharishscf
+         restartPolicy: Always     
 ---
 apiVersion: v1
 kind: Service
