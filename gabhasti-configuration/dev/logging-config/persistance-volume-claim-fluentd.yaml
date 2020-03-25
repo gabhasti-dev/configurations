@@ -1,0 +1,27 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fluentd-pv-varlog
+  labels:
+    app: fluentd-pv-varlog
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1000M
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fluentd-pv-varlibdockercontainers
+  labels:
+    app: fluentd-pv-varlibdockercontainers
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1000M

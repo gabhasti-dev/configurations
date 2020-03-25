@@ -4,12 +4,14 @@ metadata:
    name: postgres-pv-volume
    labels:
       type: local
-      app: postgres
+      app: postgres-pv-volume
 spec:
    storageClassName: manual
    capacity:
       storage: 1000M
    accessModes:
-   - ReadWriteOnce
+   - ReadWriteMany
    hostPath: 
-     path: "/data/nfs/"
+     path: "/data/nfs/postgres"
+     
+     

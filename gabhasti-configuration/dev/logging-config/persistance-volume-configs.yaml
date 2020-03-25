@@ -1,0 +1,32 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+   name: fluentd-pv-varlog
+   labels:
+      type: local
+      app: fluentd-pv-varlog
+spec:
+   storageClassName: manual
+   capacity:
+      storage: 1000M
+   accessModes:
+   - ReadWriteMany
+   hostPath: 
+     path: "/data/nfs/fluentd/varlog"
+     
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+   name: fluentd-pv-varlibdockercontainers
+   labels:
+      type: local
+      app: fluentd-pv-varlibdockercontainers
+spec:
+   storageClassName: manual
+   capacity:
+      storage: 1000M
+   accessModes:
+   - ReadWriteMany
+   hostPath: 
+     path: "/data/nfs/fluentd/varlibdockercontainers"

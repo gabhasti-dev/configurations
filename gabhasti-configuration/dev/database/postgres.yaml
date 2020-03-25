@@ -19,6 +19,12 @@ spec:
             envFrom:
             -  configMapRef:
                   name: postgres-config
+            resources:
+               limits:
+                  memory: 200Mi
+               requests:
+                  cpu: 50m
+                  memory: 200Mi
             volumeMounts:
             -  mountPath: /var/lib/postgresql/data
                name: postgredb
@@ -28,7 +34,7 @@ spec:
                claimName: postgres-pv-claim
          imagePullSecrets:
          -  name: gabhastiharishscf
-         restartPolicy: Always     
+         restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
