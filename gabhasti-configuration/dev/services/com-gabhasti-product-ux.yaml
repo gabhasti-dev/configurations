@@ -18,6 +18,7 @@ spec:
             imagePullPolicy: Always
             ports:
             -  containerPort: 8081
+            
             resources:
                limits:
                   memory: 200Mi
@@ -27,11 +28,8 @@ spec:
             env:
             -  name: JAVA_OPTS
                value: -Xmx128m -Xms64m
-            envFrom:
-            -  configMapRef:
-                  name: postgres-config
          imagePullSecrets:
-         -  name: gabhastiharishscf
+         -  name: gabhastiharishscf      
 ---
 apiVersion: v1
 kind: Service

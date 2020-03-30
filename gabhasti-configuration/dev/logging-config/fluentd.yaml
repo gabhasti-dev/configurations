@@ -39,9 +39,9 @@ spec:
                   memory: 200Mi
             volumeMounts:
             -  name: varlog
-               mountPath: /var/log
+               mountPath: /data/nfs/fluentd/varlog
             -  name: varlibdockercontainers
-               mountPath: /var/lib/docker/containers
+               mountPath: /data/nfs/fluentd/varlibdockercontainers
                readOnly: true
          terminationGracePeriodSeconds: 30
          volumes:
@@ -50,10 +50,4 @@ spec:
                claimName: fluentd-pv-varlog
          -  name: varlibdockercontainers
             persistentVolumeClaim:
-               claimName: fluentd-pv-varlibdockercontainers      
-         #-  name: varlog
-         #   hostPath:
-         #      path: /var/log
-         #-  name: varlibdockercontainers
-         #   hostPath:
-         #      path: /var/lib/docker/containers
+               claimName: fluentd-pv-varlibdockercontainers
